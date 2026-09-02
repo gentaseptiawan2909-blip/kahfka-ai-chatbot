@@ -74,6 +74,16 @@ Example conversations:
 5. Activate workflow
 6. Test via Telegram
 
+## Screenshots
+![Workflow](screenshots/canvas.png)
+![Demo 1](screenshots/telegram-demo-1.png)
+![Demo 2](screenshots/telegram-demo-2.png)
+
+## Import Workflow
+1. Download `workflow/kahfka-chatbot-workflow.json`
+2. n8n → Import from File
+3. Set credentials: Telegram Bot Token, Google Gemini API Key
+
 ## 📁 Project Structure
 kahfka-ai-chatbot/
 ├── README.md
