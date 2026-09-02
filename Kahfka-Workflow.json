@@ -1,0 +1,161 @@
+{
+  "name": "Kahfka Ai Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a7270d07-0c8f-4dec-9dbb-23fc33ac7bd4",
+      "name": "Telegram Trigger",
+      "webhookId": "0a9b6da2-67e0-47e7-a2c2-ef2f60e9dcfa",
+      "credentials": {
+        "telegramApi": {
+          "id": "uDHEWaBDzyOIjOVg",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Telegram Trigger').item.json.message.text }}",
+        "options": {
+          "systemMessage": "Kamu adalah \"Kahfka\", asisten customer service virtual untuk KAHFKA STORE — toko baju online yang menjual fashion pria & wanita casual (kaos, kemeja, celana, jaket).\n\nINFORMASI TOKO:\n- Nama: Kahfka Store\n- Jam operasional CS: Senin-Sabtu, 09.00-17.00 WIB\n- Pengiriman: JNE, J&T, SiCepat (estimasi 2-5 hari)\n- Metode pembayaran: Transfer bank (BCA, Mandiri, BRI), QRIS, COD\n- Gratis ongkir minimal pembelian Rp 300.000\n- Kebijakan retur: 3 hari setelah barang diterima, kondisi asli belum dicuci\n- Ukuran tersedia: S, M, L, XL, XXL\n\nPERAN:\n- Bantu pelanggan tentang produk, ukuran, pengiriman, pembayaran, retur\n- Berikan respons singkat, jelas, solutif (maksimal 3-4 kalimat)\n- Bahasa Indonesia yang ramah dan hangat\n\nATURAN:\n- Jika pertanyaan di luar topik toko baju (contoh: teknologi, politik, dll), tolak sopan dan arahkan kembali\n- Jika tidak tahu jawaban spesifik (stok real-time, harga terbaru), sarankan cek website atau chat admin\n- Jangan mengarang harga, stok, atau promo\n- Panggil pelanggan dengan \"Kak\"\n- Tutup dengan \"Ada lagi yang bisa saya bantu, Kak?\"\n\nGAYA:\n- Ramah, tidak"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "706b9008-b34c-416f-a542-847eb9c72655",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}_v2"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        360,
+        232
+      ],
+      "id": "bbd0de80-c781-4f59-8243-29a50da82f14",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $('AI Agent').item.json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        576,
+        0
+      ],
+      "id": "9a739cc7-a536-4b10-a2c1-850f0f07a679",
+      "name": "Send a text message",
+      "webhookId": "d601a72e-14f2-4c9f-bd2c-3cfe30d997da",
+      "credentials": {
+        "telegramApi": {
+          "id": "uDHEWaBDzyOIjOVg",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        232,
+        232
+      ],
+      "id": "49b0f391-5d7e-4fb7-a9b5-e472fde0147c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "5WKRcYaWrVHHvpzv",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "eae39404-63c4-4275-a059-12dd535774e1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "89c230eebe6365fdcb2916697cde473b8e472239facc3e38d34ab21f1f9c24c6"
+  },
+  "nodeGroups": [],
+  "id": "JZdzguBycdqtnsPK",
+  "tags": []
+}
