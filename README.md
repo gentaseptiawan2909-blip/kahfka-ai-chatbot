@@ -97,7 +97,7 @@ kahfka-ai-chatbot/
 ## 👤 Author
 
 **Redpanda** — Civil Engineer transitioning into AI Automation
-- 🔗 [LinkedIn](https://linkedin.com/in/your-profile)
+- 🔗 [LinkedIn]([https://linkedin.com/in/your-profile](https://www.linkedin.com/in/gentaseptiawan/))
 - 📧 Available for freelance AI automation projects
 
 ## 📄 License
